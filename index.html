@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Show and hide layers</title>
+    <meta
+      name="viewport"
+      content="initial-scale=1,maximum-scale=1,user-scalable=no"
+    />
+    <script src="https://api.mapbox.com/mapbox-gl-js/v1.11.1/mapbox-gl.js"></script>
+    <link
+      href="https://api.mapbox.com/mapbox-gl-js/v1.11.1/mapbox-gl.css"
+      rel="stylesheet"
+    />
+    <link href="./styles.css" rel="stylesheet" />
+  </head>
+
+  <body>
+    
+    <div class="big-wrapper">
+
+    <aside id="rs-coastal-sidebar">
+      <h1 class="title">Rio Grande do Sul Coastal Impact for 2100</h1>
+      
+      <h3>Models Description:</h3>
+
+      <section class="sidebar-models">
+        <button type="button" class="collapsible">uBTM</button>
+        <div class="content">
+          <p>
+            The Uncertainty Bathub Model (uBTM) (De Lima et al., 2020) consists
+            of an analysis of the sea-level rise impact by the uncertainty of
+            sea-level projections and vertical error of the Digital
+            Elevation/Terrain Model (DEM/DTM). The results showed the probability
+            of the site to be impact with sea-level flood on 2100.
+          </p>
+          <p>
+            <b>
+              Important! Because of the size of data, the zoom out is limited.
+            </b>
+          </p>
+        </div>
+        <button type="button" class="collapsible">EPR</button>
+        <div class="content">
+          <p>
+            The End Point Rate (EPR) method was applied by using the EPR QGIS Model
+            (De Lima et al., 2020) and calculates a shoreline projection for
+            2100 using shorelines extracted from Intertidal changes data (Murray
+            et al., 2019) of the years 1992 and 2016.
+          </p>
+        </div>
+        <button type="button" class="collapsible">BRGM</button>
+        <div class="content">
+          <p>
+            The Bruun Rule for Google Earth Engine Model (BRGM) (De Lima et al.,
+            2020) is a model created to apply the Bruun Rule (Bruun, 1962) on
+            Google Earth Engine. The model calculates the shoreline retreat
+            for 2100. The final shoreline position is the extreme point of the
+            line of buffer on land.
+          </p>
+        </div>
+        <button type="button" class="collapsible">MOLUSCE</button>
+        <div class="content">
+          <p>
+            The Modules for Land Use Change Simulations (MOLUSCE) (NEXTGIS,
+            2017) is a model that uses Artificial Neuron Networks to predict the Land Use in the future.
+            In this analysis (De Lima et. al. 2020) was used the Land Use from
+            Mapbiomas (Mapbiomas, 2020) and the projections were calculated for 
+            the years of 2049, 2081 and 2113.
+          </p>
+        </div>
+        <button type="button" class="collapsible">RCP Infomation</button>
+        <div class="content">
+          <p>
+            The data of sea-level in the future was extracted from the regional
+            projections of the Special Report on Climate Change and Oceans and
+            the Cryosphere (SROCC) of Intergovernmental Panel on Climate Change
+            (IPCC). Was used the Representative Concentration Pathway (RCP) 4.5:
+            0.46 (0.31 - 0.63) and RCP 8.5: 0.68 (0.50 - 0.90) for 2081 – 2100.
+          </p>
+        </div>
+      </section>
+
+      <div class="sidebar-footer">
+        <p>
+          <img
+            src="https://logodownload.org/wp-content/uploads/2016/10/cnpq-logo.png"
+            height="53"
+            width="111"
+          />
+        </p>
+        <p>
+          <img
+            src="https://storage-prtl-co.imgix.net/endor/organisations/772/logos/1547652569_logo_UA.png"
+            height="45"
+            width="125"
+          />
+        </p>
+        <p>
+          <img
+            src="https://i1.wp.com/www.northdroneportugal.com/wp-content/uploads/2019/04/logo-northdrone-dark.png"
+            height="40"
+            width="135"
+          />
+        </p>
+      </div>
+    </aside>
+    
+    <div class="map-container">
+      
+      <div id="map"></div>
+
+      <div id="state-legend" class="legend">
+        <h3>Legend</h3>
+        <h4>uBTM</h4>
+        <h4>Impact Probability (%) - 2100</h4>
+        <div><span style="background-color: #a73200"></span>100</div>
+        <div><span style="background-color: #ff0000"></span>90</div>
+        <div><span style="background-color: #ff00ab"></span>80</div>
+        <div><span style="background-color: #aa00ff"></span>70</div>
+        <div><span style="background-color: #0303ff"></span>60</div>
+        <div><span style="background-color: #00abff"></span>50</div>
+        <div><span style="background-color: #00ffab"></span>40</div>
+        <div><span style="background-color: #03ff03"></span>30</div>
+        <div><span style="background-color: #aaff00"></span>20</div>
+        <div><span style="background-color: #ffab00"></span>10</div>
+        <h4>EPR - 2100</h4>
+        <div>
+          <span style="background-color: #ffaf00"></span>Shoreline Retreat
+        </div>
+        <div><span style="background-color: #00ffff"></span>Shoreline Foward</div>
+        <h4>BRGM</h4>
+        <div><span style="background-color: #ff0000"></span>RCP 8.5</div>
+        <div><span style="background-color: #fff700"></span>RCP 4.5</div>
+        <h4>Cities - MOLUSCE Projections</h4>
+        <div><span style="background-color: #000000"></span>1985</div>
+        <div><span style="background-color: #cccccc"></span>2001</div>
+        <div><span style="background-color: #fafafa"></span>2017</div>
+        <div><span style="background-color: #fefa16"></span>2049</div>
+        <div><span style="background-color: #ed0202"></span>2081</div>
+        <div><span style="background-color: #b30000"></span>2113</div>
+      </div>
+
+      <nav id="menu"></nav>
+      
+    </div>
+
+    <script>
+      mapboxgl.accessToken =
+        "pk.eyJ1IjoibHVjYXN0ZXJyZXMiLCJhIjoiY2o2aHhhZHc2MGxoMjMzbnljZWNwd3JqciJ9.6Om_5YEOr-K1kEVBFZcq8w";
+      // Set bounds to New York, New York
+      var bounds = [
+        [-58.04728500751165, -37.68392799015035], // Southwest coordinates
+        [-45.91058699000139, -23.87764500765852] // Northeast coordinates
+      ];
+      var map = new mapboxgl.Map({
+        container: "map",
+        style: "mapbox://styles/lucasterres/ckdh6iyzu0wjf1imicqqwtr9i",
+        zoom: 10,
+        center: [-50.126, -29.978],
+        maxBounds: bounds
+      });
+
+      map.on("load", function() {
+        // add source and layer for museums
+
+        map.addSource("Cities", {
+          type: "vector",
+          url: "mapbox://lucasterres.6oacphyd"
+        });
+
+        map.addLayer({
+          id: "Cities",
+          type: "fill",
+          source: "Cities",
+          "source-layer": "urban_simul_all-0lo1c6",
+
+          layout: {
+            // make layer visible by default
+            visibility: "visible"
+          },
+
+          paint: {
+            "fill-color": [
+              "interpolate",
+              ["linear"],
+              ["get", "Cities"],
+              1985,
+              "hsl(161, 0%, 0%)",
+              2001,
+              "hsl(159, 0%, 80%)",
+              2017,
+              "hsl(159, 0%, 98%)",
+              2049,
+              "hsl(59, 99%, 54%)",
+              2081,
+              "hsl(0, 98%, 47%)",
+              2113,
+              "hsl(0, 100%, 35%)"
+            ]
+          }
+        });
+
+        // add source and layer for contours
+        map.addSource("BRGM", {
+          type: "vector",
+          url: "mapbox://lucasterres.6yav3yrt"
+        });
+        map.addLayer({
+          id: "BRGM",
+          type: "line",
+          source: "BRGM",
+          "source-layer": "BRGM_Final-b3rf8d",
+          layout: {
+            // make layer visible by default
+            visibility: "visible",
+            "line-join": "round",
+            "line-cap": "round"
+          },
+          paint: {
+            "line-color": [
+              "match",
+              ["get", "BRGM"],
+              [1],
+              "hsl(0, 0%, 100%)",
+              [2],
+              "hsl(59, 95%, 54%)",
+              [3],
+              "hsl(0, 100%, 48%)",
+              "hsla(0, 0%, 0%, 0)"
+            ]
+          }
+        });
+
+        map.addSource("uBTM RCP45", {
+          type: "vector",
+          url: "mapbox://lucasterres.ckjp5uv6"
+        });
+
+        map.addLayer({
+          id: "uBTM RCP45",
+          type: "fill",
+          source: "uBTM RCP45",
+          "source-layer": "ubtm_45_final-5s0cdj",
+
+          layout: {
+            // make layer visible by default
+            visibility: "visible"
+          },
+
+          paint: {
+            "fill-color": [
+              "interpolate",
+              ["linear"],
+              ["get", "uBTM RCP45"],
+              10,
+              "#ffab00",
+              20,
+              "#aaff00",
+              30,
+              "#03ff03",
+              40,
+              "#00ffab",
+              50,
+              "#00abff",
+              60,
+              "#0303ff",
+              70,
+              "#aa00ff",
+              80,
+              "#ff00ab",
+              90,
+              "#ff0000",
+              100,
+              "#a73200"
+            ],
+            "fill-opacity": 0.5
+          }
+        });
+
+        map.addSource("uBTM RCP85", {
+          type: "vector",
+          url: "mapbox://lucasterres.018om8g8"
+        });
+
+        map.addLayer({
+          id: "uBTM RCP85",
+          type: "fill",
+          source: "uBTM RCP85",
+          "source-layer": "ubtm_85_final-661nqr",
+
+          layout: {
+            // make layer visible by default
+            visibility: "visible"
+          },
+
+          paint: {
+            "fill-color": [
+              "interpolate",
+              ["linear"],
+              ["get", "uBTM RCP85"],
+              10,
+              "#ffab00",
+              20,
+              "#aaff00",
+              30,
+              "#03ff03",
+              40,
+              "#00ffab",
+              50,
+              "#00abff",
+              60,
+              "#0303ff",
+              70,
+              "#aa00ff",
+              80,
+              "#ff00ab",
+              90,
+              "#ff0000",
+              100,
+              "#a73200"
+            ],
+            "fill-opacity": 0.5
+          }
+        });
+
+        var coll = document.getElementsByClassName("collapsible");
+        var i;
+
+        for (i = 0; i < coll.length; i++) {
+          coll[i].addEventListener("click", function() {
+            this.classList.toggle("active");
+            var content = this.nextElementSibling;
+            if (content.style.display === "block") {
+              content.style.display = "none";
+            } else {
+              content.style.display = "block";
+            }
+          });
+        }
+
+        map.addSource("EPR", {
+          type: "vector",
+          url: "mapbox://lucasterres.c94zvinw"
+        });
+
+        map.addLayer({
+          id: "EPR",
+          type: "fill",
+          source: "EPR",
+          "source-layer": "EPR_Final-dbo093",
+
+          layout: {
+            // make layer visible by default
+            visibility: "visible"
+          },
+
+          paint: {
+            "fill-color": [
+              "match",
+              ["get", "EPR"],
+              [-1],
+              "hsl(175, 92%, 49%)",
+              [1],
+              "hsl(37, 100%, 64%)",
+              [1992],
+              "hsl(301, 82%, 53%)",
+              [2016],
+              "hsl(118, 84%, 63%)",
+              "hsla(0, 0%, 0%, 0)"
+            ],
+            "fill-opacity": 1
+          }
+        });
+      });
+
+      // enumerate ids of the layers
+      var toggleableLayerIds = [
+        "Cities",
+        "BRGM",
+        "EPR",
+        "uBTM RCP85",
+        "uBTM RCP45"
+      ];
+
+      // set up the corresponding toggle button for each layer
+      for (var i = 0; i < toggleableLayerIds.length; i++) {
+        var id = toggleableLayerIds[i];
+
+        var link = document.createElement("a");
+        link.href = "#";
+        link.className = "active";
+        link.textContent = id;
+
+        link.onclick = function(e) {
+          var clickedLayer = this.textContent;
+          e.preventDefault();
+          e.stopPropagation();
+
+          var visibility = map.getLayoutProperty(clickedLayer, "visibility");
+
+          // toggle layer visibility by changing the layout object's visibility property
+          if (visibility === "visible") {
+            map.setLayoutProperty(clickedLayer, "visibility", "none");
+            this.className = "";
+          } else {
+            this.className = "active";
+            map.setLayoutProperty(clickedLayer, "visibility", "visible");
+          }
+        };
+
+        var layers = document.getElementById("menu");
+        layers.appendChild(link);
+      }
+    </script>
+  </body>
+</html>
